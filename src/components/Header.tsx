@@ -1,18 +1,25 @@
-export default function Header() {
+type Props = {
+  cartCount: number;
+  onOpenCart: () => void;
+};
+
+export default function Header({ cartCount, onOpenCart }: Props) {
   return (
     <header className="header">
       <div className="container header-inner">
-        <a href="/" className="logo">
-          Minh<span>ShopMini</span>
+        <a href="#top" className="logo">
+          Minh<span>ShoeStore</span>
         </a>
+
         <nav className="nav">
-          <a href="/">Trang chủ</a>
-          <a href="/products">Sản phẩm</a>
-          <a href="/about">Giới thiệu</a>
+          <a href="#top">Trang chủ</a>
+          <a href="#products">Sản phẩm</a>
+          <a href="#contact">Liên hệ</a>
         </nav>
-        <a href="/cart" className="cart-link">
-          🛒 Giỏ hàng (0)
-        </a>
+
+        <button type="button" className="cart-btn" onClick={onOpenCart}>
+          👟 Giỏ hàng ({cartCount})
+        </button>
       </div>
     </header>
   );
