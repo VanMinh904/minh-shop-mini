@@ -2,7 +2,6 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Banner from "./components/Banner";
 import ProductList from "./components/ProductList";
-import CartModal from "./components/CartModal";
 import Footer from "./components/Footer";
 import { products, type Product } from "./data/products";
 import {
@@ -11,13 +10,6 @@ import {
   type SortOrder,
 } from "./utils/product";
 import { formatPrice } from "./utils/format";
-import {
-  addToCart,
-  countItems,
-  removeFromCart,
-  updateQuantity,
-  type CartItem,
-} from "./utils/cart";
 import "./App.css";
 
 function App() {
@@ -25,8 +17,6 @@ function App() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [maxPrice, setMaxPrice] = useState<number | "">("");
   const [sortOrder, setSortOrder] = useState<SortOrder | "">("");
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   const categories = ["Tất cả", ...getCategories(products)];
 
@@ -48,47 +38,13 @@ function App() {
     setSortOrder("");
   };
 
-  const handleAddToCart = (product: Product, size: number) => {
-    if (product.stock === 0) return;
-
-    setCart((prev) => {
-      const existing = prev.find(
-        (item) => item.product.id === product.id && item.size === size
-      );
-      if (existing && existing.quantity >= product.stock) {
-        return prev;
-      }
-      return addToCart(prev, product, size, 1);
-    });
+  const handleProductAction = (_product: Product, _size: number) => {
+    // Phần thêm giỏ hàng tương tác để dành cho Buổi 3
   };
-
-  const handleUpdateQty = (productId: number, size: number, delta: number) => {
-    setCart((prev) => {
-      const target = prev.find(
-        (item) => item.product.id === productId && item.size === size
-      );
-      if (!target) return prev;
-
-      const nextQty = Math.min(target.quantity + delta, target.product.stock);
-      return updateQuantity(prev, productId, size, nextQty);
-    });
-  };
-
-  const handleRemoveItem = (productId: number, size: number) => {
-    setCart((prev) => removeFromCart(prev, productId, size));
-  };
-
-  const handleCheckout = () => {
-    alert("Đặt hàng thành công! Cảm ơn bạn đã mua sắm tại MinhShoeStore.");
-    setCart([]);
-    setIsCartOpen(false);
-  };
-
-  const totalCount = countItems(cart);
 
   return (
     <>
-      <Header cartCount={totalCount} onOpenCart={() => setIsCartOpen(true)} />
+      <Header cartCount={0} onOpenCart={() => {}} />
 
       <Banner />
 
@@ -153,7 +109,7 @@ function App() {
           <ProductList
             title={`Danh sách giày (${filteredProducts.length})`}
             items={filteredProducts}
-            onAddToCart={handleAddToCart}
+            onAddToCart={handleProductAction}
           />
         </section>
 
@@ -162,20 +118,11 @@ function App() {
             <ProductList
               title={`Sản phẩm sắp hết hàng (${lowStockProducts.length})`}
               items={lowStockProducts}
-              onAddToCart={handleAddToCart}
+              onAddToCart={handleProductAction}
             />
           </section>
         )}
       </main>
-
-      <CartModal
-        isOpen={isCartOpen}
-        items={cart}
-        onClose={() => setIsCartOpen(false)}
-        onUpdateQty={handleUpdateQty}
-        onRemoveItem={handleRemoveItem}
-        onCheckout={handleCheckout}
-      />
 
       <Footer />
     </>

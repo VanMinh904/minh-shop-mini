@@ -18,7 +18,7 @@ export const products: Product[] = [
     image: "src/assets/Nike Air Force 1 '07 White.jpg",
     category: "Sneaker",
     sizes: [38, 39, 40, 41, 42],
-    stock: 12,
+    stock: 5,
   },
   {
     id: 2,
@@ -28,7 +28,7 @@ export const products: Product[] = [
     image: "src/assets/Adidas Ultraboost Light.avif",
     category: "Giày chạy bộ",
     sizes: [39, 40, 41, 42, 43],
-    stock: 7,
+    stock: 0,
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ export const products: Product[] = [
     image: "src/assets/Converse Chuck 70 High Black.png",
     category: "Sneaker",
     sizes: [36, 37, 38, 39, 40],
-    stock: 0,
+    stock: 10,
   },
   {
     id: 4,
@@ -48,7 +48,7 @@ export const products: Product[] = [
     image: "src/assets/Giày Tây Derby Da Bò Classic.jpg",
     category: "Giày tây",
     sizes: [39, 40, 41, 42],
-    stock: 15,
+    stock: 10,
   },
   {
     id: 5,
@@ -58,7 +58,7 @@ export const products: Product[] = [
     image: "src/assets/Vans Old Skool Black White.webp",
     category: "Sneaker",
     sizes: [37, 38, 39, 40, 41],
-    stock: 9,
+    stock: 10,
   },
   {
     id: 6,
@@ -68,7 +68,7 @@ export const products: Product[] = [
     image: "src/assets/Asics Gel-Kayano 30.webp",
     category: "Giày chạy bộ",
     sizes: [40, 41, 42, 43],
-    stock: 6,
+    stock: 10,
   },
   {
     id: 7,
@@ -78,7 +78,7 @@ export const products: Product[] = [
     image: "src/assets/Giày Loafer Da Lộn Nâu.webp",
     category: "Giày tây",
     sizes: [39, 40, 41, 42],
-    stock: 0,
+    stock: 10,
   },
   {
     id: 8,
