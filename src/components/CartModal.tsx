@@ -1,10 +1,5 @@
-import type { Product } from "../data/products";
-
-export type CartItem = {
-  product: Product;
-  size: number;
-  quantity: number;
-};
+import { calcTotal, type CartItem } from "../utils/cart";
+import { formatPrice } from "../utils/format";
 
 type Props = {
   isOpen: boolean;
@@ -25,10 +20,7 @@ export default function CartModal({
 }: Props) {
   if (!isOpen) return null;
 
-  const totalPrice = items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
+  const totalPrice = calcTotal(items);
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -41,56 +33,65 @@ export default function CartModal({
         </div>
 
         {items.length === 0 ? (
-          <p className="empty-cart">Giỏ hàng đang trống. Hãy chọn một đôi giày nhé!</p>
+          <p className="empty-cart">
+            Giỏ hàng đang trống. Hãy chọn một đôi giày nhé!
+          </p>
         ) : (
           <>
             <div className="cart-list">
-              {items.map((item) => (
-                <div
-                  key={`${item.product.id}-${item.size}`}
-                  className="cart-item"
-                >
-                  <img src={item.product.image} alt={item.product.name} />
-                  <div className="cart-info">
-                    <h4>{item.product.name}</h4>
-                    <p className="cart-meta">
-                      Size: <strong>{item.size}</strong> ·{" "}
-                      {item.product.price.toLocaleString("vi-VN")} đ
-                    </p>
-                    <div className="qty-controls">
-                      <button
-                        type="button"
-                        onClick={() => onUpdateQty(item.product.id, item.size, -1)}
-                      >
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        type="button"
-                        onClick={() => onUpdateQty(item.product.id, item.size, 1)}
-                        disabled={item.quantity >= item.product.stock}
-                      >
-                        +
-                      </button>
-                      <button
-                        type="button"
-                        className="remove-btn"
-                        onClick={() => onRemoveItem(item.product.id, item.size)}
-                      >
-                        Xóa
-                      </button>
+              {items.map((item) => {
+                const sizeNum = Number(item.size);
+                return (
+                  <div
+                    key={`${item.product.id}-${item.size}`}
+                    className="cart-item"
+                  >
+                    <img src={item.product.image} alt={item.product.name} />
+                    <div className="cart-info">
+                      <h4>{item.product.name}</h4>
+                      <p className="cart-meta">
+                        Size: <strong>{item.size}</strong> ·{" "}
+                        {formatPrice(item.product.price)}
+                      </p>
+                      <div className="qty-controls">
+                        <button
+                          type="button"
+                          onClick={() => onUpdateQty(item.product.id, sizeNum, -1)}
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          type="button"
+                          onClick={() => onUpdateQty(item.product.id, sizeNum, 1)}
+                          disabled={item.quantity >= item.product.stock}
+                        >
+                          +
+                        </button>
+                        <button
+                          type="button"
+                          className="remove-btn"
+                          onClick={() => onRemoveItem(item.product.id, sizeNum)}
+                        >
+                          Xóa
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="modal-footer">
               <div className="total-row">
                 <span>Tổng thanh toán:</span>
-                <strong>{totalPrice.toLocaleString("vi-VN")} đ</strong>
+                <strong>{formatPrice(totalPrice)}</strong>
               </div>
-              <button type="button" className="btn checkout-btn" onClick={onCheckout}>
+              <button
+                type="button"
+                className="btn checkout-btn"
+                onClick={onCheckout}
+              >
                 Đặt hàng ngay
               </button>
             </div>

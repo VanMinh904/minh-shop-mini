@@ -3,9 +3,17 @@ import Header from "./components/Header";
 import Banner from "./components/Banner";
 import CategoryList from "./components/CategoryList";
 import ProductList from "./components/ProductList";
-import CartModal, { type CartItem } from "./components/CartModal";
+import CartModal from "./components/CartModal";
 import Footer from "./components/Footer";
 import { products, type Product } from "./data/products";
+import { filterProducts } from "./utils/product";
+import {
+  addToCart,
+  countItems,
+  removeFromCart,
+  updateQuantity,
+  type CartItem,
+} from "./utils/cart";
 import "./App.css";
 
 function App() {
@@ -14,13 +22,9 @@ function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
-  const filteredProducts = products.filter((p) => {
-    const matchCategory =
-      selectedCategory === "Tất cả" || p.category === selectedCategory;
-    const matchKeyword =
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.brand.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchCategory && matchKeyword;
+  const filteredProducts = filterProducts(products, {
+    category: selectedCategory,
+    keyword: searchTerm,
   });
 
   const handleAddToCart = (product: Product, size: number) => {
@@ -30,35 +34,27 @@ function App() {
       const existing = prev.find(
         (item) => item.product.id === product.id && item.size === size
       );
-      if (existing) {
-        return prev.map((item) =>
-          item.product.id === product.id && item.size === size
-            ? { ...item, quantity: Math.min(item.quantity + 1, product.stock) }
-            : item
-        );
+      if (existing && existing.quantity >= product.stock) {
+        return prev;
       }
-      return [...prev, { product, size, quantity: 1 }];
+      return addToCart(prev, product, size, 1);
     });
   };
 
   const handleUpdateQty = (productId: number, size: number, delta: number) => {
-    setCart((prev) =>
-      prev
-        .map((item) =>
-          item.product.id === productId && item.size === size
-            ? { ...item, quantity: item.quantity + delta }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
+    setCart((prev) => {
+      const target = prev.find(
+        (item) => item.product.id === productId && item.size === size
+      );
+      if (!target) return prev;
+
+      const nextQty = Math.min(target.quantity + delta, target.product.stock);
+      return updateQuantity(prev, productId, size, nextQty);
+    });
   };
 
   const handleRemoveItem = (productId: number, size: number) => {
-    setCart((prev) =>
-      prev.filter(
-        (item) => !(item.product.id === productId && item.size === size)
-      )
-    );
+    setCart((prev) => removeFromCart(prev, productId, size));
   };
 
   const handleCheckout = () => {
@@ -67,7 +63,7 @@ function App() {
     setIsCartOpen(false);
   };
 
-  const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalCount = countItems(cart);
 
   return (
     <>

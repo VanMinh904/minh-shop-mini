@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Product } from "../data/products";
+import { formatPrice } from "../utils/format";
 
 type Props = {
   product: Product;
@@ -50,9 +51,7 @@ export default function ProductCard({ product, onAddToCart }: Props) {
         </div>
 
         <div className="product-footer">
-          <p className="product-price">
-            {product.price.toLocaleString("vi-VN")} <span>₫</span>
-          </p>
+          <p className="product-price">{formatPrice(product.price)}</p>
 
           <button
             type="button"
@@ -60,7 +59,7 @@ export default function ProductCard({ product, onAddToCart }: Props) {
             disabled={isOutOfStock}
             onClick={() => onAddToCart(product, selectedSize)}
           >
-            {isOutOfStock ? "Tạm hết hàng" : `+ Thêm size ${selectedSize}`}
+            {isOutOfStock ? "Hết hàng" : `+ Thêm size ${selectedSize}`}
           </button>
         </div>
       </div>

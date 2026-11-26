@@ -721,3 +721,22 @@ main.container {
     width: 100%;
   }
 }
+/* ---------- Lab 2 ---------- */
+main section + section {
+  margin-top: 40px;
+}
+
+.badge-out {
+  align-self: flex-start;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #fde2e1;
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
