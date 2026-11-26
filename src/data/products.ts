@@ -98,7 +98,7 @@ export const products: Product[] = [
     price: 250000,
     stock: 20,
     sizes: [38, 39, 40, 41, 42],
-    image: "https://via.placeholder.com/400x400?text=Nike+Crew+Socks",
+    image: "src/assets/Tất Cổ Cao Nike Everyday Cushioned Crew.jpg",
   },
   {
     id: 10,
@@ -108,6 +108,6 @@ export const products: Product[] = [
     price: 180000,
     stock: 4,
     sizes: [38, 39, 40, 41, 42],
-    image: "https://via.placeholder.com/400x400?text=Adidas+No+Show+Socks",
+    image: "src/assets/Tất Cổ Ngắn Adidas Athletic No-Show.avif",
   },
 ];
