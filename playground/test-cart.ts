@@ -9,7 +9,12 @@ import {
 } from "../src/utils/cart.ts";
 import type { CartItem } from "../src/utils/cart.ts";
 import { formatPrice } from "../src/utils/format.ts";
-import { filterProducts, getCategories } from "../src/utils/product.ts";
+import {
+  filterProducts,
+  getCategories,
+  searchByPriceRange,
+  groupByCategory,
+} from "../src/utils/product.ts";
 
 const firstShoe = products[0];
 const fourthShoe = products[3] ?? products[0];
@@ -32,6 +37,7 @@ console.log(
 );
 
 console.log("Danh mục giày:", getCategories(products));
+console.log("Số mẫu giày theo danh mục:", groupByCategory(products));
 
 const sampleCategory = getCategories(products)[0];
 console.log(
@@ -46,4 +52,10 @@ console.log(
   filterProducts(products, { keyword: "nike", maxPrice: 3000000 }).map(
     (p) => p.name
   )
+);
+
+const midRangeShoes = searchByPriceRange(products, 1500000, 3000000);
+console.log(
+  "Giày khoảng 1.500.000 đ - 3.000.000 đ:",
+  midRangeShoes.map((p) => `${p.name} (${formatPrice(p.price)})`)
 );

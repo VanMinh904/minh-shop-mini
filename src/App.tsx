@@ -37,6 +37,10 @@ function App() {
     sort: sortOrder === "" ? undefined : sortOrder,
   });
 
+  const lowStockProducts = products.filter(
+    (p) => p.stock >= 1 && p.stock <= 5
+  );
+
   const handleResetFilters = () => {
     setSelectedCategory("Tất cả");
     setSearchTerm("");
@@ -152,6 +156,16 @@ function App() {
             onAddToCart={handleAddToCart}
           />
         </section>
+
+        {lowStockProducts.length > 0 && (
+          <section>
+            <ProductList
+              title={`Sản phẩm sắp hết hàng (${lowStockProducts.length})`}
+              items={lowStockProducts}
+              onAddToCart={handleAddToCart}
+            />
+          </section>
+        )}
       </main>
 
       <CartModal
